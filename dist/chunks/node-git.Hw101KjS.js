@@ -18,8 +18,10 @@ class VitestGit {
   }
   async findChangedFiles(options) {
     const root = await this.getRoot(this.cwd);
-    if (!root)
+    if (!root) {
+      console.debug('VITEST_DEBUG: no root found, returning null');
       return null;
+    }
     this.root = root;
     const changedSince = options.changedSince;
     if (typeof changedSince === "string") {
@@ -28,12 +30,15 @@ class VitestGit {
         this.getStagedFiles(),
         this.getUnstagedFiles()
       ]);
-      return [...committed, ...staged2, ...unstaged2];
+      const diff = [...committed, ...staged2, ...unstaged2];
+      console.debug('VITEST_DEBUG: returning diff', diff);
+      return diff;
     }
     const [staged, unstaged] = await Promise.all([
       this.getStagedFiles(),
       this.getUnstagedFiles()
     ]);
+    console.debug('VITEST_DEBUG: returning diff', [...staged, ...unstaged]);
     return [...staged, ...unstaged];
   }
   getFilesSince(hash) {

@@ -11634,6 +11634,7 @@ class Vitest {
       const related2 = await vitestGit.findChangedFiles({
         changedSince: this.config.changed
       });
+      console.log('VITEST_DEBUG: related2', related2);
       if (!related2) {
         this.logger.error(c.red("Could not find Git root. Have you initialized git with `git init`?\n"));
         process.exit(1);
@@ -11641,9 +11642,12 @@ class Vitest {
       this.config.related = Array.from(new Set(related2));
     }
     const related = this.config.related;
+    console.log('VITEST_DEBUG: related', related);
     if (!related)
       return specs;
     const forceRerunTriggers = this.config.forceRerunTriggers;
+    console.log('VITEST_DEBUG: forceRerunTriggers', forceRerunTriggers);
+    console.log('VITEST_DEBUG: mm func', mm(related, forceRerunTriggers));
     if (forceRerunTriggers.length && mm(related, forceRerunTriggers).length)
       return specs;
     if (!this.config.watch && !related.length)
@@ -11651,14 +11655,17 @@ class Vitest {
     const testGraphs = await Promise.all(
       specs.map(async (spec) => {
         const deps = await this.getTestDependencies(spec);
+        console.log('VITEST_DEBUG: deps', deps);
         return [spec, deps];
       })
     );
+    console.log('VITEST_DEBUG: testGraphs', testGraphs);
     const runningTests = [];
     for (const [filepath, deps] of testGraphs) {
       if (related.some((path) => path === filepath[1] || deps.has(path)))
         runningTests.push(filepath);
     }
+    console.log('VITEST_DEBUG: runningTests', runningTests);
     return runningTests;
   }
   getProjectsByTestFile(file) {
