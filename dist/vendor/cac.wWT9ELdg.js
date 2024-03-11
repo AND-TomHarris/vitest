@@ -11652,20 +11652,20 @@ class Vitest {
       return specs;
     if (!this.config.watch && !related.length)
       return [];
-      console.log('VITEST_DEBUG: specs', specs);
-      const testGraphs = await Promise.all(
+    console.log('VITEST_DEBUG: specs', specs.length);
+    const testGraphs = await Promise.all(
       specs.map(async (spec) => {
         const deps = await this.getTestDependencies(spec);
         return [spec, deps];
       })
     );
-    console.log('VITEST_DEBUG: testGraphs', testGraphs);
+    console.log('VITEST_DEBUG: testGraphs', testGraphs.length);
     const runningTests = [];
     for (const [filepath, deps] of testGraphs) {
       if (related.some((path) => path === filepath[1] || deps.has(path)))
         runningTests.push(filepath);
     }
-    console.log('VITEST_DEBUG: runningTests', runningTests);
+    console.log('VITEST_DEBUG: runningTests', runningTests.length);
     return runningTests;
   }
   getProjectsByTestFile(file) {
