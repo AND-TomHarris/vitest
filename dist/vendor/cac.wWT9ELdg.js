@@ -11652,10 +11652,10 @@ class Vitest {
       return specs;
     if (!this.config.watch && !related.length)
       return [];
-    const testGraphs = await Promise.all(
+      console.log('VITEST_DEBUG: specs', specs);
+      const testGraphs = await Promise.all(
       specs.map(async (spec) => {
         const deps = await this.getTestDependencies(spec);
-        console.log('VITEST_DEBUG: deps', deps);
         return [spec, deps];
       })
     );
